@@ -1,4 +1,3 @@
-
 package com.explore.exploreeasternindia.destination.controller;
 
 import com.explore.exploreeasternindia.destination.entity.Destination;
@@ -48,5 +47,25 @@ public class DestinationController {
     public String deleteDestination(@PathVariable Long id) {
         destinationService.deleteDestination(id);
         return "Destination deleted successfully!";
+    }
+
+    // GET DESTINATIONS BY STATE
+    @GetMapping("/state/{state}")
+    public List<Destination> getDestinationsByState(@PathVariable String state) {
+        return destinationService.getDestinationsByState(state);
+    }
+
+    // GET DESTINATIONS BY CATEGORY
+    @GetMapping("/category/{category}")
+    public List<Destination> getDestinationsByCategory(
+            @PathVariable String category) {
+        return destinationService.getDestinationsByCategory(category);
+    }
+
+    // SEARCH DESTINATIONS BY KEYWORD
+    @GetMapping("/search")
+    public List<Destination> searchDestinations(
+            @RequestParam String keyword) {
+        return destinationService.searchDestinations(keyword);
     }
 }

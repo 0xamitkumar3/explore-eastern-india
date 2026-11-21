@@ -3,6 +3,7 @@ package com.explore.exploreeasternindia.destination.service;
 
 import com.explore.exploreeasternindia.destination.entity.Destination;
 import com.explore.exploreeasternindia.destination.repository.DestinationRepository;
+import com.explore.exploreeasternindia.exception.DestinationNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class DestinationService {
     // READ BY ID
     public Destination getDestinationById(Long id) {
         return destinationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new DestinationNotFoundException(
                         "Destination not found with ID: " + id));
     }
 
@@ -53,5 +54,22 @@ public class DestinationService {
     public void deleteDestination(Long id) {
         Destination existingDestination = getDestinationById(id);
         destinationRepository.delete(existingDestination);
+    }
+
+    // FIND DESTINATIONS BY STATE
+    public List<Destination> getDestinationsByState(String state) {
+        return destinationRepository.findByState(state);
+    }
+
+    // FIND DESTINATIONS BY CATEGORY
+    public List<Destination> getDestinationsByCategory(String category) {
+        return destinationRepository.findByCategory(category);
+    }
+
+    // SEARCH DESTINATIONS BY KEYWORD
+    public List<Destination> searchDestinations(String keyword) {
+        return destinationRepository
+                .findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
+                        keyword, keyword);
     }
 }
