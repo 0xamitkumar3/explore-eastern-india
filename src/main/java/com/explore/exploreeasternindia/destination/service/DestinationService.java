@@ -63,7 +63,7 @@ public class DestinationService {
 
     // FIND DESTINATIONS BY CATEGORY
     public List<Destination> getDestinationsByCategory(String category) {
-        return destinationRepository.findByCategory(category);
+        return destinationRepository.findByCategoryIgnoreCase(category);
     }
 
     // SEARCH DESTINATIONS BY KEYWORD
@@ -71,5 +71,30 @@ public class DestinationService {
         return destinationRepository
                 .findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
                         keyword, keyword);
+    }
+
+    // Recommend destinations based on category
+    public List<Destination> recommendDestinations(String interest) {
+        return destinationRepository.findByCategoryIgnoreCase(interest);
+    }
+
+    // Recommend destinations based on keyword
+    public List<Destination> recommendByKeyword(String keyword) {
+        return destinationRepository
+                .findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
+                        keyword, keyword);
+    }
+
+    // Recommend destinations based on state
+    public List<Destination> recommendByState(String state) {
+        return destinationRepository.findByState(state);
+    }
+
+    // Recommend destinations by category and state
+    public List<Destination> recommendByCategoryAndState(
+            String category, String state) {
+
+        return destinationRepository
+                .findByCategoryIgnoreCaseAndStateIgnoreCase(category, state);
     }
 }

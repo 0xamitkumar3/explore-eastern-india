@@ -68,4 +68,35 @@ public class DestinationController {
             @RequestParam String keyword) {
         return destinationService.searchDestinations(keyword);
     }
+
+    // Recommend destinations based on interest
+    @GetMapping("/recommend")
+    public List<Destination> recommendDestinations(
+            @RequestParam String interest) {
+        return destinationService.recommendDestinations(interest);
+    }
+
+    // Recommend destinations based on keyword
+    @GetMapping("/recommend/keyword")
+    public List<Destination> recommendByKeyword(
+            @RequestParam String keyword) {
+        return destinationService.recommendByKeyword(keyword);
+    }
+
+    // Recommend destinations based on state
+    @GetMapping("/recommend/state")
+    public List<Destination> recommendByState(
+            @RequestParam String state) {
+        return destinationService.recommendByState(state);
+    }
+
+    // Recommend destinations by category and state
+    @GetMapping("/recommend/filter")
+    public List<Destination> recommendByCategoryAndState(
+            @RequestParam String category,
+            @RequestParam String state) {
+
+        return destinationService
+                .recommendByCategoryAndState(category, state);
+    }
 }

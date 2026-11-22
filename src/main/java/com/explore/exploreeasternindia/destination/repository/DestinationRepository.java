@@ -9,6 +9,7 @@ import java.util.List;
 public interface DestinationRepository extends JpaRepository<Destination, Long> {
     boolean existsByName(String name);
     List<Destination> findByState(String state);
-    List<Destination> findByCategory(String category);
+    List<Destination> findByCategoryIgnoreCase(String category);
     List<Destination> findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name, String description);
+    List<Destination> findByCategoryIgnoreCaseAndStateIgnoreCase(String category, String state);
 }
