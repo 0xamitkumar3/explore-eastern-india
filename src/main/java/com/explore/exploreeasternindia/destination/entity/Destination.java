@@ -1,4 +1,3 @@
-
 package com.explore.exploreeasternindia.destination.entity;
 
 import jakarta.persistence.*;
@@ -35,4 +34,10 @@ public class Destination {
     private String bestTimeToVisit;
 
     private BigDecimal entryFee;
+
+    @Column(nullable = false)
+    private Boolean bestTimeVerified = false;
+
+    @Column(nullable = false)
+    private Boolean entryFeeVerified = false;
 }
