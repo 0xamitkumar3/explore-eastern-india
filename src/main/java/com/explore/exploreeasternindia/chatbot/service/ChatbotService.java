@@ -7,6 +7,10 @@ import org.springframework.ai.session.SessionService;
 import org.springframework.ai.session.advisor.SessionAdvisors;
 import org.springframework.stereotype.Service;
 
+import org.springframework.ai.session.CreateSessionRequest;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.messages.AssistantMessage;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
@@ -20,12 +24,14 @@ public class ChatbotService {
 
     private final ChatClient chatClient;
     private final DestinationService destinationService;
+    private final SessionService sessionService;
 
     public ChatbotService(
             ChatClient.Builder builder,
             SessionService sessionService,
             DestinationService destinationService) {
 
+        this.sessionService = sessionService;
         this.destinationService = destinationService;
 
         this.chatClient = builder
@@ -455,17 +461,27 @@ public class ChatbotService {
     }
 
     // Identify whether the user is requesting an itinerary.
+
     private boolean isItineraryRequest(String message) {
 
         String keyword = message.toLowerCase(Locale.ROOT);
 
+        boolean hasDayCount = Pattern
+                .compile("\\b\\d+\\s*[- ]?\\s*days?\\b")
+                .matcher(keyword)
+                .find();
+
+        boolean mentionsTrip = keyword.contains("trip")
+                || keyword.contains("itinerary")
+                || keyword.contains("travel plan");
+
         return keyword.contains("itinerary")
+                || (hasDayCount && mentionsTrip)
                 || keyword.contains("plan a trip")
                 || keyword.contains("plan my trip")
-                || keyword.contains("trip plan")
-                || keyword.contains("travel plan")
-                || keyword.contains("days trip");
+                || keyword.contains("trip plan");
     }
+
 
 
 
@@ -526,29 +542,47 @@ public class ChatbotService {
         );
 
         // Step 5: Construct the final response using Java.
-        return """
-            Your %d-day %s itinerary for Bihar!
+        String response = """
+        Your %d-day %s itinerary for Bihar!
 
-            The following destinations have been selected
-            from our MySQL database:
+        The following destinations have been selected
+        from our MySQL database:
 
-            %s
+        %s
 
-            Important information:
-            - Destination details are taken from our database.
-            - Entry fees are currently unverified.
-            - Best visiting times are currently unverified.
-            - Distances, travel times, accommodation and
-              transport costs are not available in our database.
+        Important information:
+        - Destination details are taken from our database.
+        - Entry fees are currently unverified.
+        - Best visiting times are currently unverified.
+        - Distances, travel times, accommodation and
+          transport costs are not available in our database.
 
-            Please check official tourism sources for
-            current travel information.
+        Please check official tourism sources for
+        current travel information.
 
-            Would you like to explore any of these destinations?
-            """.formatted(
+        Would you like to explore any of these destinations?
+        """.formatted(
                 numberOfDays,
                 category,
                 itinerary
         );
+
+        sessionService.findOrCreate(
+                CreateSessionRequest.builder()
+                        .id(conversationId)
+                        .build()
+        );
+
+        sessionService.appendMessage(
+                conversationId,
+                new UserMessage(message)
+        );
+
+        sessionService.appendMessage(
+                conversationId,
+                new AssistantMessage(response)
+        );
+
+        return response;
     }
 }
