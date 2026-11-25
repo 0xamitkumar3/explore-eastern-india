@@ -61,4 +61,24 @@ public class GuideController {
             @PathVariable String language) {
         return guideService.getGuidesByLanguage(language);
     }
+
+    // Search guides by specialization
+    @GetMapping("/specialization/{specialization}")
+    public List<Guide> getGuidesBySpecialization(
+            @PathVariable String specialization) {
+        return guideService.getGuidesBySpecialization(specialization);
+    }
+
+    // Get all verified guides
+    @GetMapping("/verified")
+    public List<Guide> getVerifiedGuides() {
+        return guideService.getVerifiedGuides();
+    }
+
+    // Get verified guides by district
+    @GetMapping("/verified/district/{district}")
+    public List<Guide> getVerifiedGuidesByDistrict(
+            @PathVariable String district) {
+        return guideService.getVerifiedGuidesByDistrict(district);
+    }
 }

@@ -64,4 +64,19 @@ public class GuideService {
     public List<Guide> getGuidesByLanguage(String language) {
         return guideRepository.findByLanguagesContainingIgnoreCase(language);
     }
+
+    // Search guides by specialization
+    public List<Guide> getGuidesBySpecialization(String specialization) {
+        return guideRepository.findBySpecializationContainingIgnoreCase(specialization);
+    }
+
+    // Get all verified guides
+    public List<Guide> getVerifiedGuides() {
+        return guideRepository.findByVerifiedTrue();
+    }
+
+    // Get verified guides by district
+    public List<Guide> getVerifiedGuidesByDistrict(String district) {
+        return guideRepository.findByDistrictIgnoreCaseAndVerifiedTrue(district);
+    }
 }

@@ -9,4 +9,7 @@ import java.util.List;
 public interface GuideRepository extends JpaRepository<Guide, Long> {
     List<Guide> findByDistrictIgnoreCase(String district);
     List<Guide> findByLanguagesContainingIgnoreCase(String language);
+    List<Guide> findBySpecializationContainingIgnoreCase(String specialization);
+    List<Guide> findByVerifiedTrue();
+    List<Guide> findByDistrictIgnoreCaseAndVerifiedTrue(String district);
 }
