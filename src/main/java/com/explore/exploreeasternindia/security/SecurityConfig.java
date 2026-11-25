@@ -1,4 +1,3 @@
-
 package com.explore.exploreeasternindia.security;
 
 import com.explore.exploreeasternindia.admin.service.AdminDetailsService;
@@ -54,22 +53,30 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
 
                 .authorizeHttpRequests(auth -> auth
-                        // Only login endpoint is public
-                        .requestMatchers(
-                                HttpMethod.POST,
-                                "/api/admin/auth/login"
-                        ).permitAll()
-
-                        // All other admin authentication routes are protected
+                        .requestMatchers(HttpMethod.POST, "/api/admin/auth/login").permitAll()
                         .requestMatchers("/api/admin/auth/**").hasRole("ADMIN")
-
-                        // All other admin APIs are protected
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
-                        // Public tourism APIs remain accessible
-                        .anyRequest().permitAll()
-                )
+                        // Destination write operations require ADMIN
+                        .requestMatchers(HttpMethod.POST, "/api/destinations/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/destinations/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/destinations/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/destinations/**").hasRole("ADMIN")
 
+                        // Guide write operations require ADMIN
+                        .requestMatchers(HttpMethod.POST, "/api/guides/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/guides/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/guides/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/guides/**").hasRole("ADMIN")
+
+                        // Tourism Service write operations require ADMIN
+                        .requestMatchers(HttpMethod.POST, "/api/tourism-services/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/tourism-services/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/tourism-services/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/tourism-services/**").hasRole("ADMIN")
+
+                        // Public read operations
+                        .anyRequest().permitAll())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
