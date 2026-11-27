@@ -1,30 +1,42 @@
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-function Home() {
-  return (
-    <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
-      <h1 className="text-4xl font-bold">
-        Explore Eastern India
-      </h1>
-    </div>
-  );
-}
+import Layout from "./components/layout/Layout";
 
-function NotFound() {
-  return (
-    <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
-      <h1 className="text-3xl font-bold">404 - Page Not Found</h1>
-    </div>
-  );
-}
+import Home from "./pages/Home";
+import Destinations from "./pages/Destinations";
+import DestinationDetails from "./pages/DestinationDetails";
+import Services from "./pages/Services";
+import Guides from "./pages/Guides";
+import Login from "./pages/Login";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="*" element={<NotFound />} />
+        {/* Public Website Layout */}
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/destinations" element={<Destinations />} />
+          <Route path="/destinations/:id" element={<DestinationDetails />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/guides" element={<Guides />} />
+        </Route>
+
+        {/* Admin Pages - Without Public Navbar and Footer */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+
+        {/* 404 Page */}
+        <Route
+          path="*"
+          element={
+            <h1 className="p-10 text-center text-2xl font-bold">
+              404 - Page Not Found
+            </h1>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
