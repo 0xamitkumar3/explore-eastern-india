@@ -1,88 +1,38 @@
 
-# ==============================
-# Maven
-# ==============================
-target/
-.mvn/wrapper/maven-wrapper.jar
+# Backend - Java / Maven
+backend/target/
+backend/.idea/
+backend/*.iml
+backend/logs/
 
-# Keep Maven wrapper configuration
-!.mvn/wrapper/maven-wrapper.properties
+# Frontend - React / Vite
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/*.local
 
-# ==============================
-# Java
-# ==============================
-*.class
-*.jar
-*.war
-*.ear
-hs_err_pid*
-replay_pid*
-
-# ==============================
-# Environment Variables & Secrets
-# ==============================
+# Environment variables and secrets
 .env
 .env.*
 !.env.example
-application-secret.properties
-secrets.properties
 
-# ==============================
-# Logs
-# ==============================
-*.log
-logs/
+backend/.env
+backend/.env.*
+!backend/.env.example
 
-# ==============================
-# IntelliJ IDEA
-# ==============================
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+
+# IDE
 .idea/
-*.iws
-*.iml
-*.ipr
-
-# ==============================
-# Eclipse / STS
-# ==============================
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings/
-.springBeans
-.sts4-cache
-
-# ==============================
-# NetBeans
-# ==============================
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-.nb-gradle/
-
-# ==============================
-# VS Code
-# ==============================
 .vscode/
 
-# ==============================
-# Gradle
-# ==============================
-.gradle/
-build/
-
-# ==============================
-# OS Generated Files
-# ==============================
+# OS files
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# ==============================
-# Temporary Files
-# ==============================
-*.tmp
-*.bak
-*.swp
-*.swo
+# Logs
+*.log
+logs/
