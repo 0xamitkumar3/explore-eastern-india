@@ -1,67 +1,121 @@
+import { Link } from "react-router-dom";
 
 import Button from "../components/common/Button";
 import Card from "../components/common/Card";
 import SectionHeading from "../components/common/SectionHeading";
+import CTASection from "../components/home/CTASection";
+
+import heroImage from "../assets/images/bodh-gaya/bodh-gaya-hero.png";
+import bodhGayaImage from "../assets/images/bodh-gaya/bodh.jpeg";
+import nalandaImage from "../assets/images/nalanda/nalanda.jpeg";
+import rajgirImage from "../assets/images/rajgir/glass-bridge.jpeg";
+
+import WhyChooseUs from "../components/common/WhyChooseUs";
+import ExploreBihar from "../components/home/ExploreBihar";
 
 function Home() {
   return (
-    <main className="min-h-screen bg-gray-50 px-6 py-16">
-      <div className="mx-auto max-w-7xl">
+    <main className="bg-gray-50">
 
-        {/* Existing Home Heading */}
-        <div className="mb-16 text-center">
-          <h1 className="text-4xl font-bold text-emerald-800">
-            Explore Eastern India
-          </h1>
+      
+    {/* Hero Section */}
+    <section
+  className="relative flex min-h-[520px] items-center justify-center bg-cover bg-[center_10%] md:bg-top px-6 py-20 text-center"
+  style={{ backgroundImage: `url(${heroImage})` }}
+>
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-black/50"></div>
 
-          <p className="mt-4 text-lg text-gray-600">
-            Discover the culture, heritage and beautiful destinations
-            of Eastern India.
-          </p>
+      {/* Hero Content */}
+      <div className="relative z-10 mx-auto max-w-4xl text-white">
+        <p className="mb-5 text-sm font-bold uppercase tracking-[0.3em] text-orange-400">
+          Discover Eastern India
+        </p>
+
+        <h1 className="text-4xl font-extrabold leading-tight md:text-6xl">
+          Explore the Beauty of
+          <span className="mt-2 block text-orange-400">
+            Eastern India
+          </span>
+        </h1>
+
+        <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-gray-200 md:text-lg">
+          Discover ancient heritage, spiritual destinations,
+          vibrant culture and unforgettable experiences.
+        </p>
+
+        <div className="mt-9 flex flex-wrap justify-center gap-4">
+          <Link to="/destinations">
+            <Button size="lg">Explore Destinations</Button>
+          </Link>
+
+          <Link to="/services">
+            <Button
+              variant="outline"
+              size="lg"
+              className="border-white text-white hover:bg-white/10"
+            >
+              Discover More
+            </Button>
+          </Link>
         </div>
+      </div>
+    </section>
 
-        {/* Reusable Section Heading */}
+
+      {/* Destinations Section */}
+      <section className="mx-auto max-w-7xl px-6 pt-8 pb-6 md:pt-10 md:pb-8">
+
         <SectionHeading
           subtitle="Discover Bihar"
           title="Explore Amazing Destinations"
-          description="Experience the rich history, culture and natural beauty of Bihar."
+          description="From ancient universities to peaceful spiritual destinations, discover the timeless beauty of Bihar."
         />
 
-        {/* Destination Cards */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 
+          {/* Bodh Gaya */}
           <Card
+            image={bodhGayaImage}
             title="Bodh Gaya"
-            category="Historical Destination"
-            description="Explore the sacred place where Gautama Buddha attained enlightenment."
+            category="Spiritual Heritage"
+            description="Visit the sacred land where Gautama Buddha attained enlightenment."
           >
-            <Button onClick={() => alert("Exploring Bodh Gaya")}>
-              Explore More
-            </Button>
+            <Link to="/destinations">
+              <Button>Explore More</Button>
+            </Link>
           </Card>
 
+          {/* Nalanda */}
           <Card
+            image={nalandaImage}
             title="Nalanda"
-            category="Cultural Heritage"
-            description="Discover the ancient centre of learning and Buddhist heritage."
+            category="Historical Heritage"
+            description="Explore the ruins of one of the world's oldest renowned centres of learning."
           >
-            <Button variant="secondary">
-              Learn More
-            </Button>
+            <Link to="/destinations">
+              <Button>Explore More</Button>
+            </Link>
           </Card>
 
+          {/* Rajgir */}
           <Card
+            image={rajgirImage}
             title="Rajgir"
-            category="Nature & Heritage"
-            description="Experience beautiful hills, historical sites and peaceful landscapes."
+            category="Nature & Adventure"
+            description="Experience scenic hills, the glass bridge and beautiful landscapes."
           >
-            <Button variant="outline">
-              View Details
-            </Button>
+            <Link to="/destinations">
+              <Button>Explore More</Button>
+            </Link>
           </Card>
 
         </div>
-      </div>
+      </section>
+
+      <WhyChooseUs />
+      <ExploreBihar />
+      <CTASection />
     </main>
   );
 }
