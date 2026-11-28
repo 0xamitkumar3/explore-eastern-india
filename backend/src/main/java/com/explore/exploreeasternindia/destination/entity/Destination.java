@@ -1,3 +1,4 @@
+
 package com.explore.exploreeasternindia.destination.entity;
 
 import jakarta.persistence.*;
@@ -40,4 +41,8 @@ public class Destination {
 
     @Column(nullable = false)
     private Boolean entryFeeVerified = false;
+
+    // Destination hero/gallery image path or URL
+    @Column(length = 1000)
+    private String imageUrl;
 }

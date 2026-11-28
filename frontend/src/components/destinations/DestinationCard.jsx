@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import Button from "../common/Button";
 
@@ -8,22 +7,29 @@ function DestinationCard({ destination }) {
     name,
     category,
     description,
-    location,
+    district,
+    state,
     imageUrl,
   } = destination;
+
+  const image = imageUrl
+    ? `http://localhost:8080${imageUrl}`
+    : null;
 
   return (
     <div className="group overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
 
       {/* Destination Image */}
       <div className="relative h-56 overflow-hidden bg-gray-100">
-        {imageUrl ? (
+        {image ? (
           <img
-            src={imageUrl}
-            alt={name}
-            loading="lazy"
-            className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
-          />
+  src={image}
+  alt={name}
+  loading="lazy"
+  onLoad={() => console.log("Image loaded:", image)}
+  onError={() => console.error("Image failed:", image)}
+  className="h-full w-full object-cover"
+/>
         ) : (
           <div className="flex h-full items-center justify-center bg-gradient-to-br from-emerald-100 to-orange-100 text-6xl">
             🏛️
@@ -43,10 +49,10 @@ function DestinationCard({ destination }) {
           {name}
         </h3>
 
-        {location && (
+        {(district || state) && (
           <p className="mt-2 flex items-center gap-2 text-sm text-gray-500">
             <span>📍</span>
-            {location}
+            {[district, state].filter(Boolean).join(", ")}
           </p>
         )}
 

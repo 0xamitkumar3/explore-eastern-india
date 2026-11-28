@@ -1,9 +1,11 @@
+
 package com.explore.exploreeasternindia.image.service;
 
 import com.explore.exploreeasternindia.destination.entity.Destination;
 import com.explore.exploreeasternindia.destination.repository.DestinationRepository;
 import com.explore.exploreeasternindia.image.entity.DestinationImage;
 import com.explore.exploreeasternindia.image.repository.DestinationImageRepository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,11 +25,11 @@ public class ImageService {
             DestinationImageRepository imageRepository,
             DestinationRepository destinationRepository,
             ImageStorageService imageStorageService) {
+
         this.imageRepository = imageRepository;
         this.destinationRepository = destinationRepository;
         this.imageStorageService = imageStorageService;
     }
-
 
     public Resource getImageFile(Long imageId) throws IOException {
 
@@ -37,7 +39,6 @@ public class ImageService {
 
         return imageStorageService.loadImage(image.getImagePath());
     }
-
 
     @Transactional
     public DestinationImage uploadImage(
@@ -56,7 +57,12 @@ public class ImageService {
         image.setDestination(destination);
 
         try {
-            return imageRepository.save(image);
+            DestinationImage savedImage = imageRepository.save(image);
+
+            updatePrimaryImage(destination);
+
+            return savedImage;
+
         } catch (RuntimeException exception) {
             imageStorageService.deleteImage(storedFileName);
             throw exception;
@@ -64,6 +70,7 @@ public class ImageService {
     }
 
     public List<DestinationImage> getImagesByDestination(Long destinationId) {
+
         if (!destinationRepository.existsById(destinationId)) {
             throw new RuntimeException("Destination not found");
         }
@@ -78,7 +85,44 @@ public class ImageService {
                 .orElseThrow(() ->
                         new RuntimeException("Image not found"));
 
+        Destination destination = image.getDestination();
+
+        String deletedImageUrl =
+                "/api/destinations/images/" + imageId + "/file";
+
+        boolean wasPrimary = deletedImageUrl.equals(
+                destination.getImageUrl()
+        );
+
         imageStorageService.deleteImage(image.getImagePath());
         imageRepository.delete(image);
+        imageRepository.flush();
+
+        if (wasPrimary) {
+            updatePrimaryImage(destination);
+        }
+    }
+
+    private void updatePrimaryImage(Destination destination) {
+
+        DestinationImage primaryImage = imageRepository
+                .findFirstByDestination_IdOrderByIdAsc(
+                        destination.getId()
+                )
+                .orElse(null);
+
+        if (primaryImage != null) {
+
+            destination.setImageUrl(
+                    "/api/destinations/images/"
+                            + primaryImage.getId()
+                            + "/file"
+            );
+
+        } else {
+            destination.setImageUrl(null);
+        }
+
+        destinationRepository.save(destination);
     }
 }

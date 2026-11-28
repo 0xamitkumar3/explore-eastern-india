@@ -8,20 +8,6 @@ import DestinationCard from "../components/destinations/DestinationCard";
 
 import { getAllDestinations } from "../services/destinationService";
 
-// Existing local images
-import bodhGayaImage from "../assets/images/bodh-gaya/bodh.jpeg";
-import nalandaImage from "../assets/images/nalanda/nalanda.jpeg";
-import rajgirImage from "../assets/images/rajgir/glass-bridge.jpeg";
-import vaishaliImage from "../assets/images/other/monastery.jpeg";
-
-// Map destination names to local images
-const destinationImages = {
-  "Bodh Gaya": bodhGayaImage,
-  "Nalanda Mahavihara": nalandaImage,
-  "Rajgir": rajgirImage,
-  "Vaishali": vaishaliImage,
-};
-
 function Destinations() {
   const [destinations, setDestinations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,25 +17,8 @@ function Destinations() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedDistrict, setSelectedDistrict] = useState("All");
 
-  useEffect(() => {
-    const fetchDestinations = async () => {
-      try {
-        const data = await getAllDestinations();
-        setDestinations(data);
-      } catch (err) {
-        console.error("Error fetching destinations:", err);
-        setError(
-          "Unable to load destinations. Please try again later."
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDestinations();
-  }, []);
-
-  const handleRetry = async () => {
+  // Fetch destinations from backend
+  const fetchDestinations = async () => {
     setLoading(true);
     setError("");
 
@@ -58,13 +27,15 @@ function Destinations() {
       setDestinations(data);
     } catch (err) {
       console.error("Error fetching destinations:", err);
-      setError(
-        "Unable to load destinations. Please try again later."
-      );
+      setError("Unable to load destinations. Please try again later.");
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchDestinations();
+  }, []);
 
   // Get unique categories dynamically from API
   const categories = [
@@ -84,7 +55,7 @@ function Destinations() {
     ),
   ].sort();
 
-  // Apply search, category and district filters together
+  // Apply search, category and district filters
   const filteredDestinations = destinations.filter((destination) => {
     const matchesSearch = destination.name
       .toLowerCase()
@@ -212,7 +183,7 @@ function Destinations() {
             </p>
 
             <button
-              onClick={handleRetry}
+              onClick={fetchDestinations}
               className="mt-4 rounded-lg bg-red-500 px-5 py-2 text-sm font-semibold text-white transition hover:bg-red-600"
             >
               Try Again
@@ -220,7 +191,7 @@ function Destinations() {
           </div>
         )}
 
-        {/* No Destinations from API */}
+        {/* No Destinations */}
         {!loading && !error && destinations.length === 0 && (
           <div className="py-16 text-center">
             <p className="text-lg font-semibold text-gray-700">
@@ -255,12 +226,7 @@ function Destinations() {
                 {filteredDestinations.map((destination) => (
                   <DestinationCard
                     key={destination.id}
-                    destination={{
-                      ...destination,
-                      location: `${destination.district}, ${destination.state}`,
-                      imageUrl:
-                        destinationImages[destination.name] || null,
-                    }}
+                    destination={destination}
                   />
                 ))}
               </div>
